@@ -64,7 +64,7 @@ const Transaction = () => {
 
       <div className={classes.wrapper}>
         <Card className={classes.root} variant="outlined">
-          {[carrentUser].map(item => (
+          {[carrentUser]?.map(item => (
             <CardContent key={item.currency}>
               <Typography variant="h5" component="h2" className={classes.title}>
                 Transaction Details

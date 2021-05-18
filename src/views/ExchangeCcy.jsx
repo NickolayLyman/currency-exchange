@@ -25,6 +25,12 @@ const Exchange = () => {
 
   const toDetails = () => history.push('/transaction');
 
+  const currentUserID = userID;
+
+  const currentUserHistoryExchange = historyExchange.filter(
+    ({ userID }) => userID === currentUserID,
+  );
+
   const handleExchangeCurrency = () => {
     const newTr = {
       userID,
@@ -77,7 +83,7 @@ const Exchange = () => {
   const handleSubmit = e => {
     e.preventDefault();
   };
-  const disableTransition = historyExchange?.length > 0 ? false : true;
+  const disableTransition = currentUserHistoryExchange.length ? false : true;
   const disableExchangeCurrency = currency === 0 ? true : false;
   const disableExchangeBaseCurrency = baseCurrency === 0 ? true : false;
 

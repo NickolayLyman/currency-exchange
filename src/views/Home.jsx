@@ -38,6 +38,7 @@ const Home = () => {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const defaultUserCurrency = useSelector(authSelectors.getDefaultCurrency);
+  const currentUserID = useSelector(authSelectors.getUserId);
   const signedIn = useSelector(authSelectors.getIsSignIn);
   useEffect(() => {
     const course = () =>
@@ -47,6 +48,10 @@ const Home = () => {
     course();
   }, []);
 
+  const currentUserDefaultCurrency = defaultUserCurrency.find(
+    ({ userID }) => userID === currentUserID,
+  );
+
   const history = useHistory();
 
   const goToExchange = ccy => {
@@ -54,8 +59,9 @@ const Home = () => {
     history.push(`/exchange/${normalalizedCcy}`, ccy);
   };
 
-  const defaultCurrency =
-    defaultUserCurrency.length > 0 ? defaultUserCurrency : data[0]?.ccy;
+  const defaultCurrency = currentUserDefaultCurrency
+    ? currentUserDefaultCurrency.ccy
+    : data[0]?.ccy;
 
   const currentCurrency = data.filter(item => defaultCurrency === item.ccy);
 

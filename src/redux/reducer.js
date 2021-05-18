@@ -30,7 +30,10 @@ const transaction = createReducer([], {
 });
 
 const defaultCurrency = createReducer([], {
-  [currencyActions.currencyDefault]: (_, { payload }) => payload,
+  [currencyActions.currencyDefault]: (state, { payload }) => [
+    payload,
+    ...state,
+  ],
 });
 
 const isSignedIn = createReducer(initialState.isSignedIn, {

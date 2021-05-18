@@ -118,7 +118,7 @@ const RegistrationPage = () => {
           <Field
             onChange={handleChange}
             component={TextField}
-            type="text"
+            type="email"
             name="email"
             label="Email"
             variant="outlined"
@@ -143,9 +143,3 @@ const RegistrationPage = () => {
 };
 
 export default RegistrationPage;
-
-// const RegistrationPage = () => {
-//   return <div>Registration page</div>;
-// };
-
-// export default RegistrationPage;

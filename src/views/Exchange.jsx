@@ -9,7 +9,8 @@ import { useHistory } from 'react-router-dom';
 import fetchExchangeRates from '../api';
 import MyButton from '../components/MyButton/MyButton';
 import operation from '../redux/operation';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import authSelectors from '../redux/selectors';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -40,6 +41,7 @@ export default function Exchange() {
 
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
+  const userID = useSelector(authSelectors.getUserId);
 
   useEffect(() => {
     const course = () =>
@@ -54,8 +56,12 @@ export default function Exchange() {
   const goToExchange = ccy => {
     const normalalizedCcy = ccy.toLowerCase();
     history.push(`/exchange/${normalalizedCcy}`, ccy);
+    const idCcy = {
+      userID,
+      ccy,
+    };
 
-    dispatch(operation.setDefaultCurrency(ccy));
+    dispatch(operation.setDefaultCurrency(idCcy));
   };
 
   const handleGoBack = () => history.push('/');
