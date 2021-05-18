@@ -2,24 +2,22 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import shortid from 'shortid';
-
+import { useSelector, useDispatch } from 'react-redux';
+import authSelectors from '../redux/selectors';
+import operation from '../redux/operation';
 import fetchExchangeRates from '../api';
 import st from './ExchangeCcy.module.css';
 import MyButton from '../components/MyButton/MyButton';
 
 const Exchange = () => {
-  const parseLocalStorage = JSON.parse(
-    window.localStorage.getItem('transaction'),
-  );
+  const dispatch = useDispatch();
+  const historyExchange = useSelector(authSelectors.getUserExchange);
   const history = useHistory();
   const exchangeId = history.location.state;
   const [data, setData] = useState([]);
   const [currency, setCurrency] = useState(0);
   const [baseCurrency, setBaseCurrency] = useState(0);
-  const [transaction, setTransaction] = useState(() => {
-    return parseLocalStorage || [];
-  });
+  const userID = useSelector(authSelectors.getUserId);
 
   const filteredId = data.filter(item => item.ccy === exchangeId);
   const calculatorCurrency = currency * filteredId[0]?.buy;
@@ -29,31 +27,29 @@ const Exchange = () => {
 
   const handleExchangeCurrency = () => {
     const newTr = {
-      id: shortid.generate(),
+      userID,
       date: new Date().toLocaleString(),
       currency: `${currency} ${filteredId[0].ccy}`,
       calculatorCurrency: `${calculatorCurrency.toFixed(2)} ${
         filteredId[0].base_ccy
       }`,
     };
-    setTransaction(prevTr => [newTr, ...prevTr]);
+
+    dispatch(operation.exangeCurrency(newTr));
   };
 
   const handleExchangeBaseCurrency = () => {
     const newTr = {
-      id: shortid.generate(),
+      userID,
       date: new Date().toLocaleString(),
       currency: `${baseCurrency} ${filteredId[0].base_ccy}`,
       calculatorCurrency: `${calculatorBaseCurrency.toFixed(2)} ${
         filteredId[0].ccy
       }`,
     };
-    setTransaction(prevTr => [newTr, ...prevTr]);
-  };
 
-  useEffect(() => {
-    window.localStorage.setItem('transaction', JSON.stringify(transaction));
-  }, [transaction]);
+    dispatch(operation.exangeCurrency(newTr));
+  };
 
   useEffect(() => {
     !exchangeId && history.push('/');
@@ -81,7 +77,7 @@ const Exchange = () => {
   const handleSubmit = e => {
     e.preventDefault();
   };
-  const disableTransition = transaction?.length > 0 ? false : true;
+  const disableTransition = historyExchange?.length > 0 ? false : true;
   const disableExchangeCurrency = currency === 0 ? true : false;
   const disableExchangeBaseCurrency = baseCurrency === 0 ? true : false;
 

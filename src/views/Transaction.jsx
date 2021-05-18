@@ -2,11 +2,11 @@ import { useHistory } from 'react-router-dom';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-
 import CardContent from '@material-ui/core/CardContent';
-
 import Typography from '@material-ui/core/Typography';
+import { useSelector } from 'react-redux';
 import MyButton from '../components/MyButton/MyButton';
+import authSelectors from '../redux/selectors';
 
 const useStyles = makeStyles({
   root: {
@@ -39,12 +39,12 @@ const Transaction = () => {
   const history = useHistory();
   const handleGoBack = () => history.push('/');
   const handleGoExchangeHistory = () => history.push('/transactionhistory');
-  const parseLocalStorage = JSON.parse(
-    window.localStorage.getItem('transaction'),
-  );
+  const lastExchange = useSelector(authSelectors.getUserExchange);
+  const currentUserID = useSelector(authSelectors.getUserId);
 
-  const lastTransaction = [];
-  lastTransaction.push(parseLocalStorage[0]);
+  const carrentUser = lastExchange.find(
+    ({ userID }) => userID === currentUserID,
+  );
 
   const classes = useStyles();
 
@@ -64,8 +64,8 @@ const Transaction = () => {
 
       <div className={classes.wrapper}>
         <Card className={classes.root} variant="outlined">
-          {lastTransaction.map(item => (
-            <CardContent key={item.id}>
+          {[carrentUser].map(item => (
+            <CardContent key={item.currency}>
               <Typography variant="h5" component="h2" className={classes.title}>
                 Transaction Details
               </Typography>

@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
 import fetchExchangeRates from '../api';
 import MyButton from '../components/MyButton/MyButton';
+import operation from '../redux/operation';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -33,9 +35,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function OutlinedCard() {
+export default function Exchange() {
   const classes = useStyles();
+
   const [data, setData] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const course = () =>
@@ -50,14 +54,8 @@ export default function OutlinedCard() {
   const goToExchange = ccy => {
     const normalalizedCcy = ccy.toLowerCase();
     history.push(`/exchange/${normalalizedCcy}`, ccy);
-    const defaultCurrency = {
-      ccy,
-    };
 
-    window.localStorage.setItem(
-      'defaultCurrency',
-      JSON.stringify(defaultCurrency),
-    );
+    dispatch(operation.setDefaultCurrency(ccy));
   };
 
   const handleGoBack = () => history.push('/');

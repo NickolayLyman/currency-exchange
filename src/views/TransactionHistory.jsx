@@ -9,6 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import MyButton from '../components/MyButton/MyButton';
+import authSelectors from '../redux/selectors';
+import { useSelector } from 'react-redux';
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -45,10 +47,11 @@ const useStyles = makeStyles({
 
 export default function CustomizedTables() {
   const classes = useStyles();
-  const parseLocalStorage = JSON.parse(
-    window.localStorage.getItem('transaction'),
+  const lastExchange = useSelector(authSelectors.getUserExchange);
+  const currentUserID = useSelector(authSelectors.getUserId);
+  const carrentUser = lastExchange.filter(
+    ({ userID }) => userID === currentUserID,
   );
-
   const history = useHistory();
   const handleGoBack = () => history.push('/');
 
@@ -70,8 +73,8 @@ export default function CustomizedTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {parseLocalStorage.map(row => (
-              <StyledTableRow key={row.id}>
+            {carrentUser.map(row => (
+              <StyledTableRow key={row.date}>
                 <StyledTableCell align="center">{row.date}</StyledTableCell>
                 <StyledTableCell align="center">{row.currency}</StyledTableCell>
                 <StyledTableCell align="center">

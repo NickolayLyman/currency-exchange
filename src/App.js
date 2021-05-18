@@ -1,31 +1,41 @@
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Exchange from './views/Exchange';
 import Header from './components/Header/Header';
 import Home from './views/Home';
 import ExchangeCCy from './views/ExchangeCcy';
 import TransactionHistory from './views/TransactionHistory';
 import Transaction from './views/Transaction';
+import RegistrationPage from './views/RegistrationPage';
+import LoginPage from './views/LoginPage';
+import PrivateRoute from './components/Route/PrivateRoute';
+import PablicRoute from './components/Route/PublicRoute';
 
 function App() {
   return (
     <div className="App">
       <Header />
       <Switch>
-        <Route exact path="/">
+        <PablicRoute exact path="/">
           <Home />
-        </Route>
-        <Route exact path="/exchange">
+        </PablicRoute>
+        <PrivateRoute exact path="/exchange">
           <Exchange />
-        </Route>
-        <Route exact path="/exchange/:ccy">
+        </PrivateRoute>
+        <PrivateRoute exact path="/exchange/:ccy">
           <ExchangeCCy />
-        </Route>
-        <Route path="/transaction">
+        </PrivateRoute>
+        <PrivateRoute path="/transaction">
           <Transaction />
-        </Route>
-        <Route path="/transactionhistory">
+        </PrivateRoute>
+        <PrivateRoute path="/transactionhistory">
           <TransactionHistory />
-        </Route>
+        </PrivateRoute>
+        <PablicRoute exact path="/register" restricted>
+          <RegistrationPage />
+        </PablicRoute>
+        <PablicRoute exact path="/login" restricted>
+          <LoginPage />
+        </PablicRoute>
       </Switch>
     </div>
   );
