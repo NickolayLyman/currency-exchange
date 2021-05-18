@@ -13,7 +13,6 @@ const user = createReducer(initialState.user, {
   [authActions.signInRequest]: (_, { payload }) => payload,
   [authActions.signInSuccess]: (_, { payload }) => payload,
   [authActions.signOutSuccess]: () => initialState.user,
-  [authActions.getCurrentUserSuccess]: (_, { payload }) => payload,
 });
 
 const dataUser = createReducer([], {
@@ -39,7 +38,6 @@ const isSignedIn = createReducer(initialState.isSignedIn, {
   [authActions.registrationSuccess]: () => true,
   [authActions.signInRequest]: () => false,
   [authActions.signInSuccess]: () => true,
-  [authActions.getCurrentUserSuccess]: () => true,
   [authActions.signOutSuccess]: () => false,
 });
 export default combineReducers({
