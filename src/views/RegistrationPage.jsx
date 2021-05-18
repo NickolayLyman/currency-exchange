@@ -77,14 +77,12 @@ const RegistrationPage = () => {
 
   const handleSubmiting = e => {
     e.preventDefault();
-
-    const userEmail = (mail, usName) => {
-      return users.find(({ name, email }) => name === usName || email === mail);
-    };
-
     if (name === '' && email === '' && password === '') {
       return alert('Enter data please');
-    } else if (!userEmail(name, email)) {
+    } else if (users.find(user => user.name === name || user.email === email)) {
+      resetForm();
+      return alert('User alredy exist');
+    } else {
       dispatch(
         operation.registration({
           name,
@@ -94,10 +92,6 @@ const RegistrationPage = () => {
         }),
       );
       resetForm();
-    } else {
-      resetForm();
-      console.log(name);
-      return alert('User alredy exist');
     }
   };
 

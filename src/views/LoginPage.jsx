@@ -87,7 +87,7 @@ const LoginPage = () => {
       resetForm();
     } else {
       resetForm();
-      return alert('user not exist');
+      return alert('user is not exist');
     }
   };
 
